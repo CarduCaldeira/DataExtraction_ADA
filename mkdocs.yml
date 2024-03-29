@@ -1,0 +1,18 @@
+site_name: Sistema da Ceu
+repo_url: https://github.com/CarduCaldeira/LogProg2_Grupo1_ADA
+theme:
+  name: material
+  languange: pt-BR
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [source]
+
+markdown_extensions:
+  - pymdownx.tasklist  # Lista de tarefas
+  - pymdownx.emoji  # Emojis
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.highlight
