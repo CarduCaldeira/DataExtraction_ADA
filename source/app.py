@@ -1,104 +1,87 @@
-from flask import Flask, jsonify, request, Response
+from flask import Flask, jsonify, request
+import schedule
+from utils import update_db, update_raw_db, check_valide_date, get_number_news, get_number_news_bd
+import calendar
 
+app = Flask(__name__) # instância o método Flask
 
-app = Flask(__name__) # intância o método Flask
+#item 4.1
+@app.route("/<int:day>/<int:month>/<int:year>", methods=["GET"])
+def get_count_of_news_for_day(day : int, month: int, year: int):
+    
+    if check_valide_date(f"{year}-{month}-{day}"):
 
-# cria a página homepage
-@app.route("/", methods=["GET"]) # define o endpoint da página
-@app.route("/homepage", methods=["GET"]) # define o endpoint da página
-def homepage():
-    return jsonify("essa é a homepage")
+        n = get_number_news(f"{year}-{month}-{day}")
+        message = {"Quantidade de Noticias": n}
+        return jsonify(message)
 
-# cria a página ada
-@app.route("/ada", methods=["GET"]) # define o endpoint da página
-def pagina_ada():
-    return jsonify("essa é a página ada")
+    message = {"message": "Data Invalida"}
+    return jsonify(message)
 
+#item 4.1
+@app.route("/<int:month>/<int:year>", methods=["GET"])
+def get_count_of_news_for_month(month: int, year: int):
 
-# (simulando um banco de dados)
-# leitura do arquivo ou banco de dados
-dados_alunos = [
-    {"id": 1, "nome": "Renan", "idade": 34, "comida_favorita": "Nhoque"},
-    {"id": 2, "nome": "Erick", "idade": 29, "comida_favorita": "Xis"},
-]
+    n_days = calendar.monthrange(year, month)[1]
+    n = get_number_news(f"{year}-{month}-{1}", f"{year}-{month}-{n_days}")
+    message = {"Quantidade de Noticias": n}
+    return jsonify(message)
 
-# endpoint para retornar todos os dados
-@app.route("/alunos", methods=["GET"])
-def retorna_alunos():
-    return jsonify(dados_alunos)
+#item 4.1
+@app.route("/<int:year>", methods=["GET"])
+def get_count_of_news_for_year(year:int):
+    
+    n = get_number_news(f"{year}-{1}-{1}", f"{year}-{12}-{31}")
+    message = {"Quantidade de Noticias": n}
+    return jsonify(message)
 
-## outro endpoint para retornar todos os dados
-# @app.route("/aluno", methods=["GET"])
-# def retorna_alunos2():
-#     return jsonify(dados_alunos)
+#item 4.2
+@app.route("/<autor>/<fonte>", methods=["GET"])
+def get_count_of_news_for_author_source(autor : str, fonte : str):
+    pass
 
-# endpoint para retornar tanto todos os dados quanto filtrar pelo id
-@app.route("/aluno", methods=["GET"], defaults={"id": None})
-@app.route("/aluno/<int:id>", methods=["GET"])
-def retorna_aluno(id):
-    if id is None:
-        return jsonify(dados_alunos)
-    else:
-        for aluno in dados_alunos:
-            if aluno.get("id") == id:
-                print(f"Encontrei o aluno do id {id}: {aluno}")
-                return jsonify(aluno)
-        return jsonify({"message": "Aluno/a não encontrado"})
-        
-## endpoint para filtrar um aluno não informando que o id é um inteiro
-## para isso precisamos tratar o id no código
-# @app.route("/aluno/<id>", methods=["GET"])
-# def retorna_aluno(id):
-#     ### codigo
-#     print(type(id), id)
-#     for aluno in dados_alunos:
-#         print("id da base de dados", type(aluno.get("id")))
-#         if str(aluno.get("id")) == id:
-#             print(f"Encontrei o aluno do id {id}: {aluno}")
-#             return jsonify(aluno)
+#item 4.3
+@app.route("/filtro/<int:day>/<int:month>/<int:year>", methods=["GET"])
+def get_count_of_filter_news_for_day(day : int, month: int, year: int):
+    
+    if check_valide_date(f"{year}-{month}-{day}"):
 
-# Adicionar aluno no nosso banco de dados
-@app.route("/aluno", methods=["POST"])
-def incluir_novo_aluno():
-    novo_aluno = request.get_json()
-    # antes do append deveríamos verificar se estão presentes todos os campos e nos formatos específicos
-    dados_alunos.append(novo_aluno)
-    # neste ponto salvar os dados em um arquivo/banco de dados
-    return jsonify(dados_alunos)
+        n = get_number_news_bd(f"{year}-{month}-{day}")
+        message = {"Quantidade de Noticias Filtradas": n}
+        return jsonify(message)
 
-# Alterar aluno no banco de dados
-@app.route("/aluno/<int:id>", methods=["PUT"])
-def alterar_aluno(id):
-    aluno_alterado = request.get_json()
-    for aluno in dados_alunos:
-        if aluno.get("id") == id:
-            aluno.update(aluno_alterado)
-            print(f"\n\nDEBUG: {aluno}")
-            return jsonify(aluno)
+    message = {"message": "Data Invalida"}
+    return jsonify(message)
 
+#item 4.3
+@app.route("/filtro/<int:month>/<int:year>", methods=["GET"])
+def get_count_of_filter_news_for_month(month: int, year: int):
+    
+    n_days = calendar.monthrange(year, month)[1]
+    n = get_number_news_bd(f"{year}-{month}-{1}", f"{year}-{month}-{n_days}")
+    message = {"Quantidade de Noticias Filtradas": n}
+    return jsonify(message)
 
-# Deleta aluno no banco de dados
-@app.route("/aluno/<int:id>", methods=["DELETE"])
-def deleta_aluno(id):
-    for aluno in dados_alunos:
-        if aluno.get("id") == id:
-            dados_alunos.remove(aluno)
-            print(f"\n\nDEBUG: {dados_alunos}")
-            return jsonify(dados_alunos)
+#item 4.3
+@app.route("/filtro/<int:year>", methods=["GET"])
+def get_count_of_filter_news_for_year(year: int):
+    
+    n = get_number_news(f"{year}-{1}-{1}", f"{year}-{12}-{31}")
+    message = {"Quantidade de Noticias Filtradas": n}
+    return jsonify(message)
 
-@app.route('/csv')
-def csv():
-    data = u'1,2,3\n4,5,6\n'
-    bom = u'\ufeff'
-    response = Response(bom + data, content_type='text/csv; charset=utf-16')
-    return response
+#item 4.3
+@app.route("/filtro/<autor>/<fonte>", methods=["GET"])
+def get_count_of_filter_for_author_source():
+    pass
 
 if __name__ == "__main__":
-    # define a porta da aplicação
+
+    schedule.every().hour.at(":00").do(update_raw_db)
+    schedule.every().day.at("05:00").do(update_db)
     port = 5000
-    # Inicia a execução da aplicação
     try:
         app.run(port=port)
+
     except KeyboardInterrupt:
-        print('Detected keyboard interrupt, stopping ngrok and Flask...')
-    
+        print('Detected keyboard interrupt, stopping Flask...')

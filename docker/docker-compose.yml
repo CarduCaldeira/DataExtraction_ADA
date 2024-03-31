@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  db:
+    image: postgres
+    container_name: ada_pgdb
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user-name
+      POSTGRES_PASSWORD: strong-password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./../data/pgdata:/var/lib/postgresql/data/pgdata
+      #- ./../files:/home
+      - ./../data/start.sql:/docker-entrypoint-initdb.d/start.sql
+    networks:
+      - ada_network
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_ada
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: strong-password
+    volumes:
+      - ./../data/pgadmin:/var/lib/pgadmin
+    networks:
+      - ada_network
+    user: "${UID}:${GID}" 
+  
+networks:
+  ada_network:
+    driver: bridge
