@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 
-def get_news_articles(api_url: str, api_key: str) -> pd.DataFrame: 
+def get_articles(api_url: str, api_key: str) -> pd.DataFrame: 
     """Obtem artigos de notícias usando a API de notícias.
 
      Parâmetros:
@@ -18,7 +18,7 @@ def get_news_articles(api_url: str, api_key: str) -> pd.DataFrame:
     return dataframe
 
 
-def transforming_news(dataframe: pd.DataFrame) -> pd.DataFrame:
+def transforming_articles(dataframe: pd.DataFrame) -> pd.DataFrame:
     """
      Transforma um DataFrame de artigos de notícias removendo linhas onde a
      coluna é '[Removed]' ou None e retorna o DataFrame modificado.
