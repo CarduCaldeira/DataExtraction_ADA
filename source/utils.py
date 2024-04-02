@@ -42,7 +42,7 @@ def create_url_filter(filter: bool, date: Union[str, None] = None) -> str:
         q3 = params["query_3"]
         password = params["key_password"]
 
-        url = f"https://newsapi.org/v2/everything?q=({q1} AND {q2})&from={date}&sortBy=publishedAt&apiKey={password}&page=5"
+        url = f"https://newsapi.org/v2/everything?q=({q1} OR {q2})&from={date}&sortBy=publishedAt&apiKey={password}&page=5"
     
     else:
         url = f"https://newsapi.org/v2/everything?from={date}&sortBy=publishedAt&apiKey={password}"
