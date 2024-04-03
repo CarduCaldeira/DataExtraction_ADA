@@ -3,6 +3,8 @@ import schedule
 from utils import update_db, update_raw_db, check_valide_date, get_number_news, get_number_news_bd
 import calendar
 from flask_wtf.csrf import CSRFProtect
+import threading
+import time
 
 
 app = Flask(__name__) # instância o método Flask
@@ -79,11 +81,20 @@ def get_count_of_filter_news_for_year(year: int):
 def get_count_of_filter_for_author_source():
     pass
 
+def run_scheduler():
+    while True:
+        schedule.run_pending()
+        time.sleep(5)
+
 if __name__ == "__main__":
 
-    schedule.every().hour.at(":00").do(update_raw_db)
+    schedule.every().hour.at(":52").do(update_raw_db)
     schedule.every().day.at("05:00").do(update_db)
     port = 5000
+
+    scheduler_thread = threading.Thread(target=run_scheduler)
+    scheduler_thread.start()
+
     try:
         app.run(port=port)
 
