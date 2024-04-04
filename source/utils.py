@@ -21,7 +21,7 @@ def update_raw_db() -> None:
     """
     Cada uma hora faz request 
     """
-    url = create_url_filter(True)
+    url = create_url_filter()
     
     response = requests.get(url)
 
@@ -30,23 +30,20 @@ def update_raw_db() -> None:
         response = response.json()
         insert_request_df(pd.json_normalize(response["articles"]))
         
-def create_url_filter(filter: bool, date: Union[str, None] = None) -> str:
+def create_url_filter(date: Union[str, None] = None) -> str:
     """
     Cria url pra request
     """
-    if filter:
-        date = "2024-03-20"
-        params = config_url()
-        q1 = params["query_1"]
-        q2 = params["query_2"]
-        q3 = params["query_3"]
-        password = params["key_password"]
+   
+    date = "2024-03-20"
+    params = config_url()
+    q1 = params["query_1"]
+    q2 = params["query_2"]
+    q3 = params["query_3"]
+    password = params["key_password"]
 
-        url = f"https://newsapi.org/v2/everything?q=({q1} AND {q2})&from={date}&sortBy=publishedAt&apiKey={password}&page=5"
+    url = f"https://newsapi.org/v2/everything?q=({q1} AND {q2})&from={date}&sortBy=publishedAt&apiKey={password}&page=5"
     
-    else:
-        url = f"https://newsapi.org/v2/everything?from={date}&sortBy=publishedAt&apiKey={password}"
-
     return url
 
 def insert_request_df(df:pd.DataFrame) -> None:
@@ -107,8 +104,6 @@ def check_valide_date(data: str) -> bool:
     except ValueError:
         return False  
 
-def get_number_news(date_from :str, date_to : Union[str, None] = None):
-    pass
 
 def get_number_news_bd(date_from :str, date_to : Union[str, None] = None):
     pass

@@ -1,6 +1,5 @@
 CREATE DATABASE toto;
 \c toto;
-CREATE TABLE t1 (id int);
 
 CREATE TABLE noticias (
     id SERIAL PRIMARY KEY,
@@ -17,12 +16,12 @@ CREATE TABLE noticias (
 
 CREATE TABLE autor (
     id SERIAL PRIMARY KEY,
-    autor VARCHAR(255),
+    autor VARCHAR(255)
 );
 
 CREATE TABLE fonte (
     id SERIAL PRIMARY KEY,
-    fonte VARCHAR(255),
+    fonte VARCHAR(255)
 );
 
 CREATE TABLE autor_fonte (
