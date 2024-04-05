@@ -52,7 +52,7 @@ def create_url_filter(date: Union[str, None] = None) -> str:
         str: A URL completa para a requisição.
     """
 
-    # Define a data padrão se nenhuma data for fornecida
+    # Define a data padrão se nenhuma data for fornecida ou estiver no formato incorreto.
     if check_valide_date(date) == False or date is None:
         date = datetime.today().strftime("%Y-%m-%d")
 
