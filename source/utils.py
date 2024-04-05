@@ -6,6 +6,7 @@ import csv
 from io import StringIO
 import datetime
 from typing import Union
+from sqlalchemy import create_engine  # Vou usar esse por estar mais familiarizado
 
 
 def update_db() -> None:
@@ -168,3 +169,14 @@ def check_valide_date(date: str) -> bool:
 
 def get_number_news_bd(date_from :str, date_to : Union[str, None] = None):
     pass
+
+
+def load_db(sql_query):  # Modificar essa função para que ela receba a query e puxe os dados no db normalizado
+    params = config_db()
+    port = '5432'  # porta padrão do PostgreSQL
+    conn_string = f"postgresql://{params['user']}:{params['password']}@{params['host']}:{port}/{params['dbname']}"
+    engine = create_engine(conn_string)
+    dataframe = pd.read_sql_query(sql_query, engine)
+    engine.dispose()
+    return dataframe
+

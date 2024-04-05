@@ -1,14 +1,54 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import schedule
-from utils import update_db, update_raw_db, check_valide_date, get_number_news_bd
+from utils import update_db, update_raw_db, check_valide_date, get_number_news_bd, load_db
 import calendar
 from flask_wtf.csrf import CSRFProtect
 import threading
 import time
 
 
-app = Flask(__name__)  # instância o método Flask
+app = Flask(__name__, template_folder='templates')  # instância o método Flask
 csrf = CSRFProtect(app)
+
+
+
+# Rotas para acesso visual aos dados extraidos da APINews e inseridos no banco de dados...
+@app.route('/')
+def homepage():
+    return render_template('index.html')
+
+
+@app.route('/allnews')
+def all_news():
+    query = "SELECT id, autor FROM noticias;"
+    df_news = load_db(query)
+    dict_news = df_news.to_dict(orient='records')
+    return render_template("all_news.html", tabela=dict_news)
+
+
+@app.route('/news_by_dia')
+def news_by_day():
+    query = ("SELECT EXTRACT(month FROM data_publicacao) AS mes, EXTRACT(day FROM data_publicacao) AS dia, COUNT(*) "
+              "FROM noticias "
+             "GROUP BY mes, dia "
+             "ORDER by mes, dia;")
+    df_news = load_db(query)
+    df_news['dia'] = df_news['dia'].astype(int)
+    df_news['mes'] = df_news['mes'].astype(int)
+    dict_news = df_news.to_dict(orient='records')
+    return render_template("news_by_day.html", tabela=dict_news)
+
+
+@app.route('/news_by_mes')
+def news_by_month():
+    query = ("SELECT EXTRACT(month FROM data_publicacao) AS mes, COUNT(*) "
+             "FROM noticias "
+             "GROUP BY mes "
+             "ORDER by mes")
+    df_news = load_db(query)
+    df_news['mes'] = df_news['mes'].astype(int)
+    dict_news = df_news.to_dict(orient='records')
+    return render_template("news_by_month.html", tabela=dict_news)
 
 
 # item 4.1
