@@ -18,14 +18,22 @@ def update_db() -> None:
 
 def update_raw_db() -> None:
     """
-    Cada uma hora faz request 
+    Cada uma hora faz request para a API e insere os dados em um DataFrame.
+
+    Esta função faz uma requisição HTTP para a API fornecida pelo método `create_url_filter()`
+    e insere os dados na base de dados definida no arquivo `config.py`.
     """
+    
+    # Cria a URL para a requisição da API
     url = create_url_filter()
     
+    # Faz a requisição HTTP para a API
     response = requests.get(url)
 
+    # Verifica se a requisição foi bem sucedida
     if response.status_code == 200:
         
+        # Converte a resposta em JSON e insere os dados na base de dados
         response = response.json()
         insert_request_df(pd.json_normalize(response["articles"]))
         
@@ -65,29 +73,45 @@ def create_url_filter(date: Union[str, None] = None) -> str:
 
     return url
 
-def insert_request_df(df:pd.DataFrame) -> None:
+def insert_request_df(df: pd.DataFrame) -> None:
+    """
+    Insere um dataframe em um banco de dados PostgreSQL.
 
+    Args:
+        df (pd.DataFrame): O dataframe a ser inserido.
+
+    Esta função se conecta a um banco de dados PostgreSQL, cria um cursor, 
+    converte o dataframe para uma string CSV, escreve a string CSV em um 
+    objeto StringIO e usa o cursor para inserir os dados CSV na tabela 
+    'noticias'.
+
+    Lança:
+        psycopg2.Error: Se houver erro ao inserir o registro.
+
+    Retorna:
+        None
     """
-    configura e faz inserçao a partir de um df
-    """
-    
+
+    # Obtém a configuração do banco de dados
     params = config_db()
-    print('Connecting to the postgreSQL database ...')
+
+    # Conecta-se ao banco de dados
+    print('Conectando ao banco de dados PostgreSQL ...')
     connection = psycopg2.connect(**params)
 
-    # create a cursor
+    # Cria um cursor
     cursor = connection.cursor()
 
     try:
+        # Converte dataframe para string CSV
         sio = StringIO()
         writer = csv.writer(sio)
         writer.writerows(df.values)
         sio.seek(0)
 
-        
+        # Insere dados CSV no banco de dados
         cursor.copy_expert(
-                sql="""
-                COPY noticias (
+            sql="""COPY noticias (
                     autor, 
                     titulo, 
                     descricao, 
@@ -98,10 +122,10 @@ def insert_request_df(df:pd.DataFrame) -> None:
                     tags,
                     fonte
                 ) FROM STDIN WITH CSV""",
-                file=sio
-            )
+            file=sio
+        )
 
-        # Commit da transação
+        # Confirma a transação
         connection.commit()
 
         print("Registro inserido com sucesso!")
@@ -110,6 +134,7 @@ def insert_request_df(df:pd.DataFrame) -> None:
         print("Erro ao inserir o registro:", e)
 
     finally:
+        # Fecha o cursor e a conexão
         if cursor:
             cursor.close()
         if connection:
