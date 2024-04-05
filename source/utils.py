@@ -43,7 +43,7 @@ def create_url_filter(date: Union[str, None] = None) -> str:
 
     Esta função recebe um parâmetro opcional 'data' que representa a data
     dos artigos de notícias. Se nenhuma data for fornecida, ela assume a data
-    atual do sistema no formato AAAA-MM-DD'.
+    atual do sistema no formato 'AAAA-MM-DD'.
 
     Args:
         data (str ou None): A data dos artigos de notícias. O valor padrão é None.
