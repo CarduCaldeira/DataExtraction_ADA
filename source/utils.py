@@ -104,6 +104,8 @@ def check_valide_date(data: str) -> bool:
     except ValueError:
         return False  
 
+def get_number_news(date_from :str, date_to : Union[str, None] = None):
+    pass
 
 def get_number_news_bd(date_from :str, date_to : Union[str, None] = None):
     pass
