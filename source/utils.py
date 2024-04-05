@@ -58,8 +58,9 @@ def create_url_filter(date: Union[str, None] = None) -> str:
 
     # Construção da URL
     url = (
-        f"https://newsapi.org/v2/everything?q=({q1} AND {q2})&"
+        f"https://newsapi.org/v2/everything?q=({q1} AND {q2} AND {q3})&"
         f"from={date}&sortBy=publishedAt&apiKey={senha}&page=5"
+        
     )
 
     return url
