@@ -45,7 +45,7 @@ def config_url() -> Dict:
     # Cria um dicionário com os parâmetros de configuração da URL
     dict_param = {
         'key_password': os.getenv("KEY_PASSWORD"),  # A senha da chave da API
-        'query_1': os.getgetenv("QUERY1"),  # A primeira consulta para o endpoint da API
+        'query_1': os.getenv("QUERY1"),  # A primeira consulta para o endpoint da API
         'query_2': os.getenv("QUERY2"),  # A segunda consulta para o endpoint da API
         'query_3': os.getenv("QUERY3")  # A terceira consulta para o endpoint da API
     }

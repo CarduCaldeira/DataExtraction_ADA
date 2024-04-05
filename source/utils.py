@@ -7,14 +7,16 @@ from io import StringIO
 import datetime
 from typing import Union
 
+
 def update_db() -> None:
     """
     Uma vez por dia sumariza as informaçoes 
     do raw_db em um db processado
     """
-    
-    #pega a informação do raw_db e salva do db
+
+    # pega a informação do raw_db e salva do db
     pass
+
 
 def update_raw_db() -> None:
     """
@@ -23,20 +25,21 @@ def update_raw_db() -> None:
     Esta função faz uma requisição HTTP para a API fornecida pelo método `create_url_filter()`
     e insere os dados na base de dados definida no arquivo `config.py`.
     """
-    
+
     # Cria a URL para a requisição da API
     url = create_url_filter()
-    
+
     # Faz a requisição HTTP para a API
     response = requests.get(url)
 
     # Verifica se a requisição foi bem sucedida
     if response.status_code == 200:
-        
+
         # Converte a resposta em JSON e insere os dados na base de dados
         response = response.json()
         insert_request_df(pd.json_normalize(response["articles"]))
-        
+
+
 def create_url_filter(date: Union[str, None] = None) -> str:
     """
     Cria a URL para a requisição.
@@ -53,9 +56,10 @@ def create_url_filter(date: Union[str, None] = None) -> str:
     """
 
     # Define a data padrão se nenhuma data for fornecida ou estiver no formato incorreto.
-    if check_valide_date(date) == False or date is None:
-        date = datetime.today().strftime("%Y-%m-%d")
+    # if check_valide_date(date) == False or date is None:
+    #     date = datetime.today().strftime("%Y-%m-%d")
 
+    date = '2024-04-02'
 
     # Obtém os parâmetros de configuração
     params = config_url()
@@ -66,12 +70,13 @@ def create_url_filter(date: Union[str, None] = None) -> str:
 
     # Construção da URL
     url = (
-        f"https://newsapi.org/v2/everything?q=({q1} AND {q2} AND {q3})&"
+        f"https://newsapi.org/v2/everything?q=({q1} AND {q2})&"
         f"from={date}&sortBy=publishedAt&apiKey={senha}&page=5"
-        
+
     )
 
     return url
+
 
 def insert_request_df(df: pd.DataFrame) -> None:
     """
@@ -140,6 +145,7 @@ def insert_request_df(df: pd.DataFrame) -> None:
         if connection:
             connection.close()
 
+
 def check_valide_date(date: str) -> bool:
     """
     Verifica se uma determinada data está no formato 'AAAA-MM-DD'.
@@ -159,8 +165,10 @@ def check_valide_date(date: str) -> bool:
     except ValueError:
         return False
 
-def get_number_news(date_from :str, date_to : Union[str, None] = None):
+
+def get_number_news(date_from: str, date_to: Union[str, None] = None):
     pass
 
-def get_number_news_bd(date_from :str, date_to : Union[str, None] = None):
+
+def get_number_news_bd(date_from: str, date_to: Union[str, None] = None):
     pass
