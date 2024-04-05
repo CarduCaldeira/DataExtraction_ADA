@@ -16,7 +16,6 @@ def update_db() -> None:
     #pega a informação do raw_db e salva do db
     pass
 
-
 def update_raw_db() -> None:
     """
     Cada uma hora faz request 
@@ -32,18 +31,37 @@ def update_raw_db() -> None:
         
 def create_url_filter(date: Union[str, None] = None) -> str:
     """
-    Cria url pra request
+    Cria a URL para a requisição.
+
+    Esta função recebe um parâmetro opcional 'data' que representa a data
+    dos artigos de notícias. Se nenhuma data for fornecida, ela assume a data
+    atual do sistema no formato AAAA-MM-DD'.
+
+    Args:
+        data (str ou None): A data dos artigos de notícias. O valor padrão é None.
+
+    Retorna:
+        str: A URL completa para a requisição.
     """
-   
-    date = "2024-03-20"
+
+    # Define a data padrão se nenhuma data for fornecida
+    if date is None:
+        date = datetime.today().strftime("%Y-%m-%d")
+
+
+    # Obtém os parâmetros de configuração
     params = config_url()
     q1 = params["query_1"]
     q2 = params["query_2"]
     q3 = params["query_3"]
-    password = params["key_password"]
+    senha = params["key_password"]
 
-    url = f"https://newsapi.org/v2/everything?q=({q1} AND {q2})&from={date}&sortBy=publishedAt&apiKey={password}&page=5"
-    
+    # Construção da URL
+    url = (
+        f"https://newsapi.org/v2/everything?q=({q1} AND {q2})&"
+        f"from={date}&sortBy=publishedAt&apiKey={senha}&page=5"
+    )
+
     return url
 
 def insert_request_df(df:pd.DataFrame) -> None:
@@ -96,13 +114,24 @@ def insert_request_df(df:pd.DataFrame) -> None:
         if connection:
             connection.close()
 
+def check_valide_date(date: str) -> bool:
+    """
+    Verifica se uma determinada data está no formato 'AAAA-MM-DD'.
 
-def check_valide_date(data: str) -> bool:
+    Args:
+        date (str): A data a ser verificada.
+
+    Returns:
+        bool: True se a date estiver no formato correto, False caso contrário.
+    """
+
+    # Tentamos analisar a data usando o formato '%Y-%m-%d'. Se falhar,
+    # retornamos False. Caso contrário, retornamos True.
     try:
-        datetime.strptime(data, '%Y-%m-%d')
-        return True 
+        datetime.strptime(date, '%Y-%m-%d')
+        return True
     except ValueError:
-        return False  
+        return False
 
 def get_number_news(date_from :str, date_to : Union[str, None] = None):
     pass
