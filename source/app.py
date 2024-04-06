@@ -89,7 +89,7 @@ def run_scheduler():
 
 if __name__ == "__main__":
 
-    schedule.every().hour.at(":23").do(update_raw_db)
+    schedule.every().hour.at(":56").do(update_raw_db)
     schedule.every().day.at("05:00").do(update_db)
     port = 5000
 

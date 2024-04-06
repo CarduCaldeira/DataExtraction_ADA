@@ -1,34 +1,22 @@
--- api_news DATABASE
+-- raw_db Schema
 
--- DATABASE: api_news
-DROP DATABASE IF EXISTS api_news;
-
-CREATE DATABASE api_news;
-
--- Connect to database
-\c api_news
-
--- SET database search path
-SET search_path TO api_news;
-
--- CREATE SCHEMA
+-- Create schema
 DROP SCHEMA IF EXISTS raw_db CASCADE;
-
 CREATE SCHEMA IF NOT EXISTS raw_db;
 
--- SET Schema search path
+-- Set search path for the schema
 SET search_path TO raw_db;
 
--- CREATE TABLES
-CREATE TABLE noticias (
+-- Create table for news
+CREATE TABLE news (
     id SERIAL PRIMARY KEY,
-    autor VARCHAR(255) NOT NULL,
-    titulo VARCHAR(255) NOT NULL,
-    descricao TEXT,
-    url VARCHAR(512) NOT NULL,
-    imagem_url VARCHAR(500),
-    data_publicacao TIMESTAMP NOT NULL,
-    conteudo TEXT,
+    author VARCHAR(255),
+    title VARCHAR(255),
+    description TEXT,
+    url VARCHAR(512),
+    image_url VARCHAR(500),
+    publication_date TIMESTAMP,
+    content TEXT,
     tags VARCHAR(255),
-    fonte VARCHAR(255) NOT NULL
+    source VARCHAR(255)
 );

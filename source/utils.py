@@ -70,8 +70,8 @@ def create_url_filter(date: Union[str, None] = None) -> str:
 
     # Construção da URL
     url = (
-        f"https://newsapi.org/v2/everything?q=({q1} AND {q2})&"
-        f"from={date}&sortBy=publishedAt&apiKey={senha}&page=5"
+        f'https://newsapi.org/v2/everything?q=Apple&'
+        f'from=2024-04-02&language=en&sortBy=publishedAt&apiKey=948867445882452ea34165f1f41fabaf&page=5'
 
     )
 
@@ -116,7 +116,7 @@ def insert_request_df(df: pd.DataFrame) -> None:
 
         # Insere dados CSV no banco de dados
         cursor.copy_expert(
-            sql="""COPY noticias (
+            sql="""COPY raw_db.noticias (
                     autor, 
                     titulo, 
                     descricao, 
