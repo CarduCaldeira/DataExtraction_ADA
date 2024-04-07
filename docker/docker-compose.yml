@@ -13,7 +13,9 @@ services:
     volumes:
       - ./../data/pgdata:/var/lib/postgresql/data/pgdata
       #- ./../files:/home
-      - ./../data/start.sql:/docker-entrypoint-initdb.d/start.sql
+      #- ./../data/start.sql:/docker-entrypoint-initdb.d/start.sql
+      - ./../data/raw_db.sql:/docker-entrypoint-initdb.d/raw_db.sql
+      - ./../data/silver_db.sql:/docker-entrypoint-initdb.d/silver_db.sql
     networks:
       - ada_network
       

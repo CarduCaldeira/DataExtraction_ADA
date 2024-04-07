@@ -1,4 +1,7 @@
--- silver_db Schema
+-- silver_db Schema 
+\c api_news
+-- CREATE SCHEMA
+SET search_path TO api_news;
 
 DROP SCHEMA IF EXISTS silver_db CASCADE;
 CREATE SCHEMA IF NOT EXISTS silver_db;

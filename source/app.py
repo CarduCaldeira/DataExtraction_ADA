@@ -10,7 +10,6 @@ import time
 app = Flask(__name__)  # instância o método Flask
 csrf = CSRFProtect(app)
 
-
 # item 4.1
 @app.route("/<int:day>/<int:month>", methods=["GET"])
 def get_count_of_news_for_day(day: int, month: int, year: int):
@@ -28,8 +27,6 @@ def get_count_of_news_for_day(day: int, month: int, year: int):
     return jsonify(message)
 
 # item 4.1
-
-
 @app.route("/<int:month>", methods=["GET"])
 def get_count_of_news_for_month(month: int, year: int = 2024):
     """
@@ -42,15 +39,11 @@ def get_count_of_news_for_month(month: int, year: int = 2024):
     return jsonify(message)
 
 # item 4.2
-
-
 @app.route("/<autor>/<fonte>", methods=["GET"])
 def get_count_of_news_for_author_source(autor: str, fonte: str):
     pass
 
 # item 4.3
-
-
 @app.route("/filtro/<int:day>/<int:month>", methods=["GET"])
 def get_count_of_filter_news_for_day(day: int, month: int, year: int = 2024):
     """
@@ -67,8 +60,6 @@ def get_count_of_filter_news_for_day(day: int, month: int, year: int = 2024):
     return jsonify(message)
 
 # item 4.3
-
-
 @app.route("/filtro/<int:month>", methods=["GET"])
 def get_count_of_filter_news_for_month(month: int, year: int = 2024):
     """
