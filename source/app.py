@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 import schedule
-from utils import update_db, update_raw_db, check_valide_date, get_number_news, get_number_news_bd
+from utils import update_db, update_raw_db, check_valide_date, get_number_news_bd
 import calendar
 from flask_wtf.csrf import CSRFProtect
 import threading
@@ -20,7 +20,7 @@ def get_count_of_news_for_day(day: int, month: int, year: int):
 
     if check_valide_date(f"{2024}-{month}-{day}"):
 
-        n = get_number_news(f"{2024}-{month}-{day}")
+        n = get_number_news_bd(f"{2024}-{month}-{day}")
         message = {"Quantidade de Noticias": n}
         return jsonify(message)
 
@@ -37,7 +37,7 @@ def get_count_of_news_for_month(month: int, year: int = 2024):
     """
 
     n_days = calendar.monthrange(year, month)[1]
-    n = get_number_news(f"{year}-{month}-{1}", f"{year}-{month}-{n_days}")
+    n = get_number_news_bd(f"{year}-{month}-{1}", f"{year}-{month}-{n_days}")
     message = {"Quantidade de Noticias": n}
     return jsonify(message)
 

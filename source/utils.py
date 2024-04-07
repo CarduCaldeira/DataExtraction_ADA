@@ -166,9 +166,5 @@ def check_valide_date(date: str) -> bool:
         return False
 
 
-def get_number_news(date_from: str, date_to: Union[str, None] = None):
-    pass
-
-
-def get_number_news_bd(date_from: str, date_to: Union[str, None] = None):
+def get_number_news_bd(date_from :str, date_to : Union[str, None] = None):
     pass
