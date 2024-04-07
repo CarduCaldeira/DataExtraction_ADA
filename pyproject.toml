@@ -29,6 +29,7 @@ mkdocs = "^1.5.3"
 mkdocs-material = "^9.5.15"
 mkdocstrings = {extras = ["python"], version = "^0.24.1"}
 ipython = "^8.23"
+ipykernel = "^6.29.4"
 
 [build-system]
 requires = ["poetry-core"]

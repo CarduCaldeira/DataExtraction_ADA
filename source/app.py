@@ -80,7 +80,7 @@ def run_scheduler():
 
 if __name__ == "__main__":
 
-    schedule.every().hour.at(":56").do(update_raw_db)
+    schedule.every().hour.at(":29").do(update_raw_db)
     schedule.every().day.at("05:00").do(update_db)
     port = 5000
 
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     scheduler_thread.start()
 
     try:
-        app.run(port=port)
+        app.run(debug=True, port=port)
 
     except KeyboardInterrupt:
         print('Detected keyboard interrupt, stopping Flask...')

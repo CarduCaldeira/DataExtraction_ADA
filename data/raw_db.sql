@@ -1,4 +1,8 @@
 -- raw_db Schema
+CREATE DATABASE api_news;
+
+-- Connect to database
+\c api_news
 
 -- Create schema
 DROP SCHEMA IF EXISTS raw_db CASCADE;

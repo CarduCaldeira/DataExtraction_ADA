@@ -116,16 +116,16 @@ def insert_request_df(df: pd.DataFrame) -> None:
 
         # Insere dados CSV no banco de dados
         cursor.copy_expert(
-            sql="""COPY raw_db.noticias (
-                    autor, 
-                    titulo, 
-                    descricao, 
+            sql="""COPY raw_db.news (
+                    author, 
+                    title, 
+                    description, 
                     url, 
-                    imagem_url, 
-                    data_publicacao,
-                    conteudo,
+                    image_url, 
+                    publication_date,
+                    content,
                     tags,
-                    fonte
+                    source
                 ) FROM STDIN WITH CSV""",
             file=sio
         )
