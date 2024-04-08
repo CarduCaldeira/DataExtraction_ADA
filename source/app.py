@@ -16,6 +16,7 @@ csrf = CSRFProtect(app)
 def homepage():
     return render_template("index.html")
 
+
 # OK
 @app.route('/allnews')
 def all_news():
@@ -23,6 +24,7 @@ def all_news():
     df_news = load_db(query)
     dict_news = df_news.to_dict(orient='records')
     return render_template("all_news.html", tabela=dict_news)
+
 
 # OK
 @app.route('/news_by_day')
@@ -157,8 +159,8 @@ def run_scheduler():
 
 if __name__ == "__main__":
 
-    schedule.every().hour.at(":16").do(update_raw_db)
-    schedule.every().day.at("12:17").do(update_db_silver)
+    schedule.every().hour.at(":52").do(update_raw_db)
+    schedule.every().day.at("16:53").do(update_db_silver)
     port = 5000
 
     scheduler_thread = threading.Thread(target=run_scheduler)

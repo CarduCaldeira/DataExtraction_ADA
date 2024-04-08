@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 import psycopg2
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, quoted_name
 from config import config_db, config_url
 import csv
 from io import StringIO
@@ -106,8 +106,8 @@ def create_url_filter(date: Union[str, None] = None) -> List[str]:
     for query in queries:    
         
         url = (
-            f'https://newsapi.org/v2/everything?q={query}&'
-            f'from={from_date}&to={to_date}&language=en&sortBy=publishedAt&apiKey={password}'
+            f'https://newsapi.org/v2/everything?q={query}'
+            f'&language=en&apiKey={password}' #from={from_date}&to={to_date}&language=en&sortBy=publishedAt
         )
         urls.append(url)
 
@@ -271,10 +271,12 @@ def insert_author(df: pd.DataFrame) -> None:
         with engine.connect() as conn:
         # Inserindo os dados na tabela authors com a cláusula ON CONFLICT
             for linha in author_values:
+                linha_escaped = linha.replace("'", "''")
+
                 query = text(f"""
                     INSERT INTO silver_db.authors (name)
-                    VALUES ('{linha}')
-                    ON CONFLICT (name) DO NOTHING;
+                    VALUES ('{linha_escaped}')
+                    ON CONFLICT (name) DO NOTHING
                 """)
                 conn.execute(query)
             conn.commit()
