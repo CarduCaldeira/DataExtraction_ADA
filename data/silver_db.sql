@@ -25,18 +25,15 @@ CREATE TABLE news (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     url VARCHAR(512) NOT NULL,
-    image_url VARCHAR(500),
     publication_date TIMESTAMP NOT NULL,
-    content TEXT,
+    query0 SMALLINT,
+    query1 SMALLINT,
+    query2 SMALLINT,
+    source_id INT REFERENCES sources(id) NOT NULL,
     author_id INT REFERENCES authors(id) NOT NULL,
-    source_id INT REFERENCES sources(id) NOT NULL
+    CONSTRAINT unique_title_url UNIQUE (title, url)
 );
 
-CREATE TABLE news_tags (
-    news_id INT REFERENCES news(id),
-    tag VARCHAR(255),
-    PRIMARY KEY (news_id, tag)
-);
 
 CREATE TABLE news_sources (
     news_id INT REFERENCES news(id),

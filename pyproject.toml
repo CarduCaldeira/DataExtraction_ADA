@@ -15,6 +15,7 @@ python-dotenv = "^1.0.1"
 schedule = "^1.2.1"
 flask-wtf = "^1.2.1"
 requests = "^2.31.0"
+sqlalchemy = "^2.0.29"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.4"
@@ -29,7 +30,6 @@ mkdocs = "^1.5.3"
 mkdocs-material = "^9.5.15"
 mkdocstrings = {extras = ["python"], version = "^0.24.1"}
 ipython = "^8.23"
-ipykernel = "^6.29.4"
 
 [build-system]
 requires = ["poetry-core"]

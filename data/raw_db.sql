@@ -22,5 +22,8 @@ CREATE TABLE news (
     publication_date TIMESTAMP,
     content TEXT,
     tags VARCHAR(255),
-    source VARCHAR(255)
+    source VARCHAR(255),
+    query0 BOOLEAN,
+    query1 BOOLEAN,
+    query2 BOOLEAN
 );

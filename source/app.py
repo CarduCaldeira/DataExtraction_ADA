@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 import schedule
-from utils import update_db, update_raw_db, check_valide_date, get_number_news_bd
+from utils import update_db_silver, update_raw_db, check_valide_date, get_number_news_bd
 import calendar
 from flask_wtf.csrf import CSRFProtect
 import threading
@@ -80,15 +80,15 @@ def run_scheduler():
 
 if __name__ == "__main__":
 
-    schedule.every().hour.at(":29").do(update_raw_db)
-    schedule.every().day.at("05:00").do(update_db)
+    schedule.every().hour.at(":48").do(update_raw_db)
+    schedule.every().day.at("04:07").do(update_db_silver)
     port = 5000
 
     scheduler_thread = threading.Thread(target=run_scheduler)
     scheduler_thread.start()
 
     try:
-        app.run(debug=True, port=port)
+        app.run(port=port)
 
     except KeyboardInterrupt:
         print('Detected keyboard interrupt, stopping Flask...')
