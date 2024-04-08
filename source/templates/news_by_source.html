@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <title>News</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css" />
+</head>
+
+<div class="column is-half is-offset-one-quarter">
+    <h1 class="title is-size-1">Quantidade de notícias por Fonte</h1>
+    <div class="box"><table class="table is-fullwidth is-bordered is-hoverable mx-auto">
+        <thead>
+            <tr>
+                <th>Fonte</th>
+                <th>Quantidade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in tabela %}
+            <tr>
+                <td>{{item['name'] }}</td> <!-- trocar isso aqui -->
+                <td>{{item['source_count']}}</td> <!-- trocar isso aqui -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table></div>
+</div>
+{% endblock %}

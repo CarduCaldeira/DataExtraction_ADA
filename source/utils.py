@@ -248,7 +248,7 @@ def insert_source(df: pd.DataFrame) -> None:
         # Inserindo os dados na tabela authors com a cláusula ON CONFLICT
             for linha in source_values:
                 query = text(f"""
-                    INSERT INTO silver_db.sources (name)
+                    INSERT INTO silver_db.sources ("name")
                     VALUES ('{linha}')
                     ON CONFLICT (name) DO NOTHING;
                 """)
@@ -346,3 +346,12 @@ def get_number_news_bd():
 def escape_string(value):
     """Escapa uma string substituindo aspas simples por duas aspas simples."""
     return value.replace("'", "''")
+
+
+def load_db(sql_query):  # Modificar essa função para que ela receba a query e puxe os dados no db normalizado
+    params = config_db()
+    conn_string = f"postgresql://{params['user']}:{params['password']}@{params['host']}:{params['port']}/{params['dbname']}"
+    engine = create_engine(conn_string)
+    dataframe = pd.read_sql_query(sql_query, engine)
+    engine.dispose()
+    return dataframe

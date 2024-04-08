@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title class="title is-size-3 has-text-centered">HealthGen</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css"/>
+</head>
+
+<div class="hero-head">
+    <nav class="navbar is-black">
+         <div class="navbar-menu">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item">
+                    Home
+                </a>
+                  <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                          Noticias
+                        </a>
+
+                        <div class="navbar-dropdown">
+                              <a href="/allnews" class="navbar-item">
+                                Todas as notícias
+                              </a>
+                              <a href="/news_by_day" class="navbar-item">
+                                Por dia
+                              </a>
+                              <a href="/news_by_month" class="navbar-item">
+                                Por mês
+                              </a>
+                              <a href="/news_by_year" class="navbar-item">
+                                Por ano
+                              </a>
+                              <a href="/news_by_author" class="navbar-item">
+                                Por autor
+                              </a>
+                              <a href="/news_by_source" class="navbar-item">
+                                Por site
+                              </a>
+                          <hr class="navbar-divider">
+                        </div>
+                  </div>
+
+            </div>
+        </div>
+    </nav>
+</div>
+
+
+<body>
+    <section class="hero is-info is-fullheight-with-navbar">
+        <div class="hero-head"> <!-- pode ser hero-head, hero-body ou gero-foot -->
+            <div class="container">
+               {% block content %}
+               {% endblock %}
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
