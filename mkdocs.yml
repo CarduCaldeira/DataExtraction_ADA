@@ -2,7 +2,7 @@ site_name: Extração de dados
 repo_url: https://github.com/CarduCaldeira/DataExtraction_ADA
 theme:
   name: material
-  laguange: pt-BR
+  language: pt-BR
 
 plugins:
   - mkdocstrings:
@@ -16,3 +16,4 @@ markdown_extensions:
   - pymdownx.mark
   - pymdownx.tilde
   - pymdownx.highlight
+
