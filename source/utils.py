@@ -247,9 +247,11 @@ def insert_source(df: pd.DataFrame) -> None:
         with engine.connect() as conn:
         # Inserindo os dados na tabela authors com a cláusula ON CONFLICT
             for linha in source_values:
+                
+                linha_escaped = linha.replace("'", "''")
                 query = text(f"""
                     INSERT INTO silver_db.sources ("name")
-                    VALUES ('{linha}')
+                    VALUES ('{linha_escaped}')
                     ON CONFLICT (name) DO NOTHING;
                 """)
                 conn.execute(query)

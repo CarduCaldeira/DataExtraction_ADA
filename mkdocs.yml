@@ -1,5 +1,5 @@
-site_name: Sistema da Ceu
-repo_url: https://github.com/CarduCaldeira/LogProg2_Grupo1_ADA
+site_name: Extração de dados
+repo_url: https://github.com/CarduCaldeira/DataExtraction_ADA
 theme:
   name: material
   languange: pt-BR

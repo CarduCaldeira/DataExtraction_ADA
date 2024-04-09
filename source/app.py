@@ -26,15 +26,6 @@ def all_news():
     return render_template("all_news.html", tabela=dict_news)
 
 
-@app.route('/news_by_id/<int:news_id>')
-def news_by_id(news_id):
-    id = int(news_id)
-    query = f"SELECT id, title, description FROM silver_db.news WHERE id={id};"
-    df_news = load_db(query)
-    df_news['id'] = df_news['id'].astype(int)
-    dict_news = df_news.to_dict(orient='records')
-    return render_template("news_by_id.html", tabela=dict_news)
-
 # OK
 @app.route('/news_by_day')
 def news_by_day():
@@ -97,79 +88,6 @@ def news_by_source():
     dict_news = df_news.to_dict(orient='records')
     return render_template("news_by_source.html", tabela=dict_news)
 
-@app.route('/news_by_author_and_source')
-def by_source():
-    query = ("""SELECT silver_db.sources.name AS source, silver_db.authors.name AS author, COUNT(silver_db.news.id) AS count
-        FROM silver_db.news
-        JOIN silver_db.sources ON silver_db.sources.id = silver_db.news.source_id
-        JOIN silver_db.authors ON silver_db.authors.id = silver_db.news.author_id
-        GROUP BY silver_db.sources.name, silver_db.authors.name
-        ORDER BY count DESC;""")
-    df_news = load_db(query)
-    dict_news = df_news.to_dict(orient='records')
-    return render_template("source_author.html", tabela=dict_news)
-
-# item 4.1
-@app.route("/<int:day>/<int:month>", methods=["GET"])
-def get_count_of_news_for_day(day: int, month: int, year: int):
-    """
-    Retorna o numero de noticias naquele dia
-    """
-
-    if check_valide_date(f"{2024}-{month}-{day}"):
-
-        n = get_number_news_bd(f"{2024}-{month}-{day}")
-        message = {"Quantidade de Noticias": n}
-        return jsonify(message)
-
-    message = {"message": "Data Invalida"}
-    return jsonify(message)
-
-# item 4.1
-@app.route("/<int:month>", methods=["GET"])
-def get_count_of_news_for_month(month: int, year: int = 2024):
-    """
-    Retorna o numero de noticias naquele mes
-    """
-
-    n_days = calendar.monthrange(year, month)[1]
-    n = get_number_news_bd(f"{year}-{month}-{1}", f"{year}-{month}-{n_days}")
-    message = {"Quantidade de Noticias": n}
-    return jsonify(message)
-
-# item 4.2
-@app.route("/<autor>/<fonte>", methods=["GET"])
-def get_count_of_news_for_author_source(autor: str, fonte: str):
-    pass
-
-# item 4.3
-@app.route("/filtro/<int:day>/<int:month>", methods=["GET"])
-def get_count_of_filter_news_for_day(day: int, month: int, year: int = 2024):
-    """
-    Retorna o numero de noticias pra cada uma das tres queries naquele dia
-    """
-
-    if check_valide_date(f"{2024}-{month}-{day}"):
-
-        n = get_number_news_bd(f"{2024}-{month}-{day}")
-        message = {"Quantidade de Noticias Filtradas": n}
-        return jsonify(message)
-
-    message = {"message": "Data Invalida"}
-    return jsonify(message)
-
-# item 4.3
-@app.route("/filtro/<int:month>", methods=["GET"])
-def get_count_of_filter_news_for_month(month: int, year: int = 2024):
-    """
-    Retorna o numero de noticias pra cada uma das tres queries naquele mes
-    """
-
-    n_days = calendar.monthrange(year, month)[1]
-    n = get_number_news_bd(f"{year}-{month}-{1}", f"{year}-{month}-{n_days}")
-    message = {"Quantidade de Noticias Filtradas": n}
-    return jsonify(message)
-
 
 def run_scheduler():
     while True:
@@ -179,8 +97,8 @@ def run_scheduler():
 
 if __name__ == "__main__":
 
-    schedule.every().hour.at(":21").do(update_raw_db)
-    schedule.every().day.at("16:22").do(update_db_silver)
+    schedule.every().hour.at(":52").do(update_raw_db)
+    schedule.every().day.at("16:53").do(update_db_silver)
     port = 5000
 
     scheduler_thread = threading.Thread(target=run_scheduler)
