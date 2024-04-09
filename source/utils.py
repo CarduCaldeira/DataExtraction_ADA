@@ -82,7 +82,7 @@ def create_url_filter(date: Union[str, None] = None) -> List[str]:
     atual do sistema no formato 'AAAA-MM-DD'.
 
     Args:
-        data (str ou None): A data dos artigos de notícias. O valor padrão é None.
+        date (str ou None): A data dos artigos de notícias. O valor padrão é None.
 
     Retorna:
         str: A URL completa para a requisição.
