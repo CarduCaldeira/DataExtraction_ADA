@@ -1,0 +1,5 @@
+data/
+site/
+__pycache__
+.env
+.env_db
