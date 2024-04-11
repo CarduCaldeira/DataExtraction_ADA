@@ -248,10 +248,10 @@ def insert_source(df: pd.DataFrame) -> None:
         # Inserindo os dados na tabela authors com a cláusula ON CONFLICT
             for linha in source_values:
                 
-                linha_escaped = linha.replace("'", "''")
+                #linha_escaped = linha.replace("'", "''")
                 query = text(f"""
                     INSERT INTO silver_db.sources ("name")
-                    VALUES ('{linha_escaped}')
+                    VALUES ('{linha}')
                     ON CONFLICT (name) DO NOTHING;
                 """)
                 conn.execute(query)
@@ -349,7 +349,7 @@ def get_number_news_bd():
 
 def escape_string(value):
     """Escapa uma string substituindo aspas simples por duas aspas simples."""
-    return value.replace("'", "''")
+    return value.replace("'", "''") if value is not None else None
 
 
 def load_db(sql_query):  # Modificar essa função para que ela receba a query e puxe os dados no db normalizado
@@ -359,3 +359,20 @@ def load_db(sql_query):  # Modificar essa função para que ela receba a query e
     dataframe = pd.read_sql_query(sql_query, engine)
     engine.dispose()
     return dataframe
+
+
+def count_keyword_occurrences(df, keywords):
+    """
+    EssA função recebe um dataframe, o nome da coluna e as palavras chave do qual queremos retornar a quantidade de ocorrências.
+    """
+    keyword_counts_title = {}
+    keyword_counts_description = {}
+
+    df['title'] = df['title'].str.lower()
+    df['description'] = df['description'].str.lower()
+    for keyword in keywords:
+        keyword_counts_title[keyword] = df['title'].str.contains(keyword, case=False, na=False).sum()
+    for keyword in keywords:
+        keyword_counts_description[keyword] = df['description'].str.contains(keyword, case=False, na=False).sum()
+
+    return keyword_counts_title, keyword_counts_description

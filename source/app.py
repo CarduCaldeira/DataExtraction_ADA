@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, render_template
 import schedule
-from utils import update_db_silver, update_raw_db, check_valide_date, get_number_news_bd, load_db
+from utils import (update_db_silver, update_raw_db, check_valide_date, get_number_news_bd, load_db,
+                   count_keyword_occurrences)
 import calendar
 from flask_wtf.csrf import CSRFProtect
 import threading
@@ -89,6 +90,40 @@ def news_by_source():
     return render_template("news_by_source.html", tabela=dict_news)
 
 
+
+@app.route('/news_by_author_and_source')
+def by_source():
+    query = ("""SELECT silver_db.sources.name AS source, silver_db.authors.name AS author, COUNT(silver_db.news.id) AS count
+        FROM silver_db.news
+        JOIN silver_db.sources ON silver_db.sources.id = silver_db.news.source_id
+        JOIN silver_db.authors ON silver_db.authors.id = silver_db.news.author_id
+        GROUP BY silver_db.sources.name, silver_db.authors.name
+        ORDER BY count DESC;""")
+    df_news = load_db(query)
+    dict_news = df_news.to_dict(orient='records')
+    return render_template("source_author.html", tabela=dict_news)
+
+
+@app.route('/news_by_id', defaults={'var_id': 1})
+@app.route('/news_by_id/<int:var_id>')
+def news_by_id(var_id):
+    id = int(var_id)
+    query = f"SELECT id, title, description FROM silver_db.news WHERE id={id};"
+    df_news = load_db(query)
+    df_news['id'] = df_news['id'].astype(int)
+    dict_news = df_news.to_dict(orient='records')
+    return render_template("news_by_id.html", tabela=dict_news)
+
+
+@app.route('/query_count')
+def news_by_query():
+    query = "SELECT id, title, description FROM silver_db.news;"
+    df_news = load_db(query)
+    count_title, count_description = count_keyword_occurrences(df_news, ['apple', 'tesla', 'xiaomi'])
+    return render_template("news_by_query.html", title_table=count_title,
+                           description_table=count_description)
+
+
 def run_scheduler():
     while True:
         schedule.run_pending()
@@ -97,8 +132,8 @@ def run_scheduler():
 
 if __name__ == "__main__":
 
-    schedule.every().hour.at(":52").do(update_raw_db)
-    schedule.every().day.at("16:53").do(update_db_silver)
+    schedule.every().hour.at(":54").do(update_raw_db)
+    schedule.every().day.at("21:58").do(update_db_silver)
     port = 5000
 
     scheduler_thread = threading.Thread(target=run_scheduler)
